@@ -1,6 +1,6 @@
 from flask import Flask, request 
 from flask_mysqldb import MySQL 
-
+import jwt, datetime, os
 
 app = Flask(__name__) 
 mysql = MySQL(app) 
@@ -31,4 +31,16 @@ def login():
         else:
             return "Invalid credentials", 401
     else:
-        return "User not found", 401
+
+def createJWT(username, secret, authz):
+    return jwt.encode(
+        {
+            "username": username,
+            "exp": datetime.datetime.utcnow() + datetime.timedelta(days=1),
+            "iat": datetime.datetime.utcnow(),
+            "admin": authz,
+            "secret": secret,
+        },
+        secret,
+        algorithm="HS256"
+    )
