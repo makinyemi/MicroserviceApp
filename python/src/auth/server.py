@@ -34,6 +34,23 @@ def login():
     else:
         return "User not found", 401
 
+#Validate JWT token
+@app.route("/validate", methods=["POST"])
+def validate():
+    token = request.headers["Authorization"]
+    if not token:
+        return "Missing credentials", 401
+    
+    token = token.split(" ")[1]
+
+    try:
+        data = jwt.decode(token, app.config["SECRET_KEY"], algorithm="HS256")
+    except:
+        return "Not authorized", 403
+
+    return data ,200
+
+
 
 def createJWT(username, secret, authz):
     return jwt.encode(
