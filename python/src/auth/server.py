@@ -51,7 +51,7 @@ def validate():
     return data ,200
 
 
-
+#Create JWT token
 def createJWT(username, secret, authz):
     return jwt.encode(
         {
@@ -64,3 +64,7 @@ def createJWT(username, secret, authz):
         secret,
         algorithm="HS256"
     )
+
+
+if __name__ == "__main__": #runs our app
+    app.run(host="0.0.0.0", port=5000) #tells flask app to listen on all public IPs on host network and port 5000
